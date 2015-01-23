@@ -101,7 +101,7 @@ class Board
   end
 
   def same_captures(x,y)
-    sames = {}
+    matches = []
   	placed_card = @board[x][y]
     adjacencies = adjacency(x, y)
 
@@ -109,14 +109,16 @@ class Board
     adjacencies.each do |direction, other_card|
       next unless other_card
       match = placed_card.same_match?(other_card, direction)
-      sames[match] ? sames[match] << other_card : sames[match] = [other_card]
+      if match
+        matches << other_card
+      end
     end
 
-    sames.values.select{|matches| matches.length > 1}.each do |cards_to_flip|
-      cards_to_flip.each do |card|
-      	next if card.color == placed_card.color
-      	card.color = placed_card.color
-      	if Rules.instance.combo
+    if matches.length > 1
+      matches.each do |card|
+        next if card.color == placed_card.color
+        card.color = placed_card.color
+        if Rules.instance.combo
       	  direction = adjacencies.key(card)
           combo_off(x, y, direction, card)
         end
