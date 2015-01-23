@@ -1,5 +1,6 @@
 require 'pry'
 require './board.rb'
+require './negamax_agent.rb'
 
 class TestGame
   def initialize
@@ -41,7 +42,17 @@ class TestGame
   end
 
   # print a player move which results in maximum score shift
-  def look_ahead(board, current_hand)
+  def look_ahead(board, current_hand, ai_hand)
+    #n = NegamaxAgent.new(board, current_hand, ai_hand)
+    #n_suggested_move = n.invoke
+    #n_suggested_card = n_suggested_move.first
+    #n_x = n_suggested_move[1]
+    #n_y = n_suggested_move[2]
+    #n_s = n_suggested_move[3]
+
+    #puts "DEBUG: negamax suggested #{@player_hand.key(n_suggested_card)} @ #{n_x + 1}, #{n_y + 1} with score of #{n_s}"
+    #return
+
     available_cards = current_hand.values.compact
     available_spaces = board.open_spaces
     possible_moves = available_cards.product(available_spaces)
@@ -67,6 +78,15 @@ class TestGame
   end
 
   def determine_ai_move(board, ai_hand, player_hand)
+    n = NegamaxAgent.new(board, ai_hand.values.compact, player_hand.values.compact)
+    n_suggested_move = n.invoke
+    n_suggested_card = n_suggested_move.first
+    n_x = n_suggested_move[1]
+    n_y = n_suggested_move[2]
+    n_s = n_suggested_move[3]
+    puts "DEBUG: negamax suggested #{ai_hand.key(n_suggested_card)} @ #{n_x}, #{n_y} with score #{n_s}"
+    return [n_suggested_card, n_x, n_y]
+
     available_cards = ai_hand.values.compact
     available_spaces = board.open_spaces
     possible_moves = available_cards.product(available_spaces)
@@ -117,7 +137,8 @@ class TestGame
   	  display_game
   	end
     
-    look_ahead(@board, @player_hand)
+    #look_ahead(@board, @player_hand)
+    #look_ahead(@board, @player_hand.values.compact, @ai_hand.values.compact)
     puts "Input: card_letter x y (ex. c 2 3)\n"
     input = gets.gsub(',' , '').rstrip
     letter, x, y = input.split
