@@ -212,7 +212,7 @@ else
   puts "COMBO? Y/N"
   r.combo = $stdin.gets.rstrip.upcase[0] == "Y"
   if r.same
-    puts "COMBO? Y/N"
+    puts "SAME WALL? Y/N"
     r.same_wall = $stdin.gets.rstrip.upcase[0] == "Y"
   else
     r.same_wall = false
