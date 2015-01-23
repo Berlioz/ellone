@@ -1,5 +1,6 @@
 require 'pry'
 require './board.rb'
+require './card_list.rb'
 require './negamax_agent.rb'
 
 $switch = false
@@ -13,6 +14,7 @@ end
 class TestGame
   def initialize(hints = false, difficulty = 8)
     @board = Board.new
+    @card_list = CardList.new
     @player_hand = generate_hand(1)
     @ai_hand = generate_hand(2)
     @difficulty = difficulty
@@ -48,8 +50,17 @@ class TestGame
   end
 
   def generate_hand(c)
-    cards = [Card.init_random(c), Card.init_random(c), Card.init_random(c), Card.init_random(c), Card.init_random(c)]
-    {"ALPHA  " => cards[0], "BRAVO  " => cards[1], "CHARLIE" => cards[2], "DELTA  " => cards[3], "ECHO   " => cards[4]}
+    rv = {}
+    choices = [6,7,8,9,10].map {|rank| @card_list.card_with_rank(rank)}
+    justify = choices.map{|c| c.first.length}.max
+
+    choices.each_with_index do |choice, index|
+      name, card = choice
+      name = sprintf("%d %-#{justify}s", index, name)
+      card.color = c
+      rv[name] = card
+    end
+    rv
   end
 
   def pc(card, row)
@@ -66,15 +77,18 @@ class TestGame
   def display_hand
   	names = @player_hand.keys
     cards = @player_hand.values
+    # a normal card is 7 characters across
+    interstitial_length = [1, names.map(&:length).max - 6].max
+    i = ' ' * interstitial_length
     puts "#{names[0]} #{names[1]} #{names[2]} #{names[3]} #{names[4]}".colorize(:green)
-    puts "#{pc(cards[0], 0)} #{pc(cards[1], 0)} #{pc(cards[2], 0)} #{pc(cards[3], 0)} #{pc(cards[4], 0)}"
-    puts "#{pc(cards[0], 1)} #{pc(cards[1], 1)} #{pc(cards[2], 1)} #{pc(cards[3], 1)} #{pc(cards[4], 1)}"
-    puts "#{pc(cards[0], 2)} #{pc(cards[1], 2)} #{pc(cards[2], 2)} #{pc(cards[3], 2)} #{pc(cards[4], 2)}"
+    puts "#{pc(cards[0], 0)}#{i}#{pc(cards[1], 0)}#{i}#{pc(cards[2], 0)}#{i}#{pc(cards[3], 0)}#{i}#{pc(cards[4], 0)}"
+    puts "#{pc(cards[0], 1)}#{i}#{pc(cards[1], 1)}#{i}#{pc(cards[2], 1)}#{i}#{pc(cards[3], 1)}#{i}#{pc(cards[4], 1)}"
+    puts "#{pc(cards[0], 2)}#{i}#{pc(cards[1], 2)}#{i}#{pc(cards[2], 2)}#{i}#{pc(cards[3], 2)}#{i}#{pc(cards[4], 2)}"
     cards = @ai_hand.values
     puts "AI HAND:"
-    puts "#{pc(cards[0], 0)} #{pc(cards[1], 0)} #{pc(cards[2], 0)} #{pc(cards[3], 0)} #{pc(cards[4], 0)}"
-    puts "#{pc(cards[0], 1)} #{pc(cards[1], 1)} #{pc(cards[2], 1)} #{pc(cards[3], 1)} #{pc(cards[4], 1)}"
-    puts "#{pc(cards[0], 2)} #{pc(cards[1], 2)} #{pc(cards[2], 2)} #{pc(cards[3], 2)} #{pc(cards[4], 2)}"
+    puts "#{pc(cards[0], 0)}#{i}#{pc(cards[1], 0)}#{i}#{pc(cards[2], 0)}#{i}#{pc(cards[3], 0)}#{i}#{pc(cards[4], 0)}"
+    puts "#{pc(cards[0], 1)}#{i}#{pc(cards[1], 1)}#{i}#{pc(cards[2], 1)}#{i}#{pc(cards[3], 1)}#{i}#{pc(cards[4], 1)}"
+    puts "#{pc(cards[0], 2)}#{i}#{pc(cards[1], 2)}#{i}#{pc(cards[2], 2)}#{i}#{pc(cards[3], 2)}#{i}#{pc(cards[4], 2)}"
   end
 
   # print a player move which results in maximum score shift
@@ -86,7 +100,7 @@ class TestGame
     n_y = n_suggested_move[2]
     n_s = n_suggested_move[3]
 
-    puts "HINT: negamax suggested #{@player_hand.key(n_suggested_card)} @ #{n_x + 1}, #{n_y + 1} is no worse than your best move."
+    puts "HINT: negamax suggested #{@player_hand.key(n_suggested_card).strip[2..-1]} @ #{n_x + 1}, #{n_y + 1} is no worse than your best move."
   end
 
   def determine_ai_move(board, ai_hand, player_hand)
