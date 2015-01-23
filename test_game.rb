@@ -195,14 +195,14 @@ class TestGame
 end
 
 r = Rules.instance
-puts "Do you want to use the default rules? (Plus, Same, Combo). Y/N"
+puts "Do you want to use the default rules? (Plus, Same, Combo, Same Wall). Y/N"
 default_rules = $stdin.gets.rstrip.upcase[0] == "Y"
 if default_rules  
   r.base = true
   r.plus = true
   r.same = true
   r.combo = true
-  r.same_wall = false
+  r.same_wall = true
 else
   r.base = true
   puts "PLUS? Y/N"
@@ -211,7 +211,12 @@ else
   r.same = $stdin.gets.rstrip.upcase[0] == "Y"
   puts "COMBO? Y/N"
   r.combo = $stdin.gets.rstrip.upcase[0] == "Y"
-  r.same_wall = false
+  if r.same
+    puts "COMBO? Y/N"
+    r.same_wall = $stdin.gets.rstrip.upcase[0] == "Y"
+  else
+    r.same_wall = false
+  end
 end
 
 puts "Please enter difficulty/lookahead length (2-8 inclusive):"

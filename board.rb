@@ -10,12 +10,22 @@ class Board
                  [nil, nil, nil],
                  [nil, nil, nil] ]
     end
+    @wall_card = Card.new(10, 10, 10, 10)
   end
 
   # FUCK
   def clone
     Marshal::load(Marshal.dump(self))
   end
+
+   def wall_adjacency(x, y)
+     rv = {}
+     rv[:north] = y != 0 ? @board[x][y - 1] : @wall_card
+     rv[:south] = y != 2 ? @board[x][y + 1] : @wall_card
+     rv[:east]  = x != 2 ? @board[x + 1][y] : @wall_card
+     rv[:west]  = x != 0 ? @board[x - 1][y] : @wall_card
+     rv
+   end
 
   def adjacency(x, y)
     rv = {}
@@ -57,7 +67,8 @@ class Board
   def resolve(x, y)
     rank_captures(x,y) if Rules.instance.base
     plus_captures(x,y) if Rules.instance.plus
-    same_captures(x,y) if Rules.instance.same
+    same_captures(x,y) if (Rules.instance.same && ! Rules.instance.same_wall)
+    same_wall_captures(x,y) if Rules.instance.same_wall
   end
 
   # resolve captures due to the card at x,y being placed
@@ -125,6 +136,31 @@ class Board
       end
     end
   end
+
+  def same_wall_captures(x,y)
+     matches = []
+     placed_card = @board[x][y]
+     adjacencies = wall_adjacency(x,y)
+     # determine the sum in all directions
+     adjacencies.each do |direction, other_card|
+       next unless other_card
+       match = placed_card.same_match?(other_card, direction)
+       if match
+         matches << other_card
+       end
+     end
+
+     if matches.length > 1
+       matches.each do |card|
+         next if card.color == placed_card.color || card == @wall_card
+         card.color = placed_card.color
+         if Rules.instance.combo
+           direction = adjacencies.key(card)
+           combo_off(x, y, direction, card)
+         end
+       end
+     end
+   end
 
   def combo_off(x, y, direction, card)
     case direction
