@@ -1,5 +1,5 @@
 class NegamaxAgent
-  def initialize(board, max_hand, min_hand, difficulty = 8)
+  def initialize(board, max_hand, min_hand, difficulty = 8, debug = false)
     @base_board = board
     @max_hand = max_hand
     @min_hand = min_hand
@@ -10,11 +10,21 @@ class NegamaxAgent
     #  is to make a move.
     @polarity = board.open_spaces.count % 2 == 0 ? 1 : -1
     @difficulty = difficulty
+    @debug = debug
+    if @debug
+      @nodes = 0
+      @leaves = 0
+      @prunes = 0
+    end
+  end
+
+  # if in debug mode, returns [total_nodes_expanded, leaves_expanded, pruned_subtrees]
+  def get_stats
+    @debug ? [@nodes, @leaves, @prunes] : nil
   end
 
   def invoke
-  	debug = @base_board.open_spaces.length == 1 ? true : false
-    negamax(@base_board, @max_hand, @min_hand, @polarity, turns, -100, 100, debug)
+    negamax(@base_board, @max_hand, @min_hand, @polarity, turns, -100, 100)
   end
 
   # depth function
@@ -39,14 +49,17 @@ class NegamaxAgent
   end
 
   #@return [card, x, y, score]
-  def negamax(board, max_hand, min_hand, polarity, depth_left, alpha, beta, debug=false)
-  	#binding.pry if debug
+  def negamax(board, max_hand, min_hand, polarity, depth_left, alpha, beta)
+    #binding.pry
+  	@nodes += 1 if @debug
     skip = false
     skipped_score = nil
 
     if depth_left == 0
+      @leaves += 1 if @debug
       [nil, nil, nil, polarity * (board.score(max_hand.first.color) + max_hand.length - min_hand.length)]
     elsif board.open_spaces.length == 0
+      @leaves += 1 if @debug
       [nil, nil, nil, polarity * (board.score(max_hand.first.color) + max_hand.length - min_hand.length)]
     else
       moves = generate_moves(max_hand, board.open_spaces)
@@ -67,6 +80,7 @@ class NegamaxAgent
 
         alpha = [alpha, best_score_so_far].max
         if alpha >= beta
+          @prunes += 1 if @debug
           break
         end
       end

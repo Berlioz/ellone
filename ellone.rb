@@ -12,7 +12,7 @@ OptionParser.new do |opts|
 
   opts.on("-n", "--benchmark [DEPTH=8]", "ignore all other options and check how long negamax takes to resolve on your machine.") do |v|
    options[:benchmark_mode] = true
-   options[:benchmark_depth] = v || 8
+   options[:benchmark_depth] = v.to_i || 8
   end
 
   #setup
