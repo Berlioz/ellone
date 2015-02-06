@@ -3,8 +3,15 @@ require './card_list.rb'
 class Hand
   attr_accessor :hand
 
-  def initialize(color)
-    @hand = random_cards(color)
+  def initialize(color, hand = nil)
+    if hand
+      @hand = hand
+      @hand.each do |name, card|
+        card.color = color
+      end
+    else
+      @hand = random_cards(color)
+    end
   end
 
   def random_cards(color)
@@ -57,6 +64,18 @@ class Hand
 
   def cards
     @hand.map(&:last).compact
+  end
+
+  def names
+    @hand.select{|name, card| card != nil}.map(&:first)
+  end
+
+  def card_with_name(name)
+    @hand.detect{|n, card| n.downcase == name.downcase && card}.last rescue nil
+  end
+
+  def name_of_card(card)
+    @hand.detect{|n, c| c == card}.first rescue nil
   end
 
   # KILL ME

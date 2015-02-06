@@ -19,7 +19,8 @@ class NegamaxAgent
 
   # depth function
   def turns
-    @base_board.open_spaces.count > 7 ? [2, @difficulty - 3].max : @difficulty
+   #@base_board.open_spaces.count > 7 ? [2, @difficulty].max : @difficulty
+   @difficulty
   end
 
   #@return [card, [x, y]]
@@ -44,9 +45,9 @@ class NegamaxAgent
     skipped_score = nil
 
     if depth_left == 0
-      [nil, nil, nil, polarity * board.score(max_hand.first.color)]
+      [nil, nil, nil, polarity * (board.score(max_hand.first.color) + max_hand.length - min_hand.length)]
     elsif board.open_spaces.length == 0
-      [nil, nil, nil, polarity * board.score(max_hand.first.color)]
+      [nil, nil, nil, polarity * (board.score(max_hand.first.color) + max_hand.length - min_hand.length)]
     else
       moves = generate_moves(max_hand, board.open_spaces)
       best_score_so_far = -100

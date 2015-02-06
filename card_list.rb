@@ -17,8 +17,24 @@ class CardList
     end
   end
 
+  def all_card_names
+    names = []
+    @ranks.each do |r, cards|
+      cards.each do |name, stats|
+        names << name
+      end
+    end
+    names
+  end
+
   def card_from_hash(h)
-    Card.new(h[:north], h[:south], h[:east], h[:west])
+    c = Card.new(h[:north], h[:south], h[:east], h[:west])
+  end
+
+  def card_with_name(name)
+    @ranks.each do |r, cards|
+      return card_from_hash(cards[name]) if cards[name]
+    end
   end
 
   def card_with_rank(rank)

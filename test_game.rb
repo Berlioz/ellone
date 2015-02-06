@@ -1,4 +1,3 @@
-require 'pry'
 require './board.rb'
 require './card_list.rb'
 require './negamax_agent.rb'
@@ -100,7 +99,7 @@ class TestGame
     n_y = n_suggested_move[2]
     n_s = n_suggested_move[3]
 
-    puts "HINT: negamax suggested #{@player_hand.key(n_suggested_card).strip[2..-1]} @ #{n_x + 1}, #{n_y + 1} is no worse than your best move."
+    puts "HINT: negamax suggested #{@player_hand.key(n_suggested_card).strip[2..-1]} @ #{n_x + 1}, #{n_y + 1} is no worse (#{n_s}) than your best move."
   end
 
   def determine_ai_move(board, ai_hand, player_hand)
@@ -110,29 +109,7 @@ class TestGame
     n_x = n_suggested_move[1]
     n_y = n_suggested_move[2]
     n_s = n_suggested_move[3]
-    return [n_suggested_card, n_x, n_y]
-
-    available_cards = ai_hand.values.compact
-    available_spaces = board.open_spaces
-    possible_moves = available_cards.product(available_spaces)
-
-    best_moves = []
-    value_of_best_move = 10
-
-    possible_moves.each do |card, space|
-      x, y = space
-      future = board.next_state(card, x, y)
-      value = retard_minimax(future, player_hand)
-
-      if value < value_of_best_move
-      	best_moves = [[card, x, y]]
-      	value_of_best_move = value
-      elsif value == value_of_best_move
-      	best_moves << [card, x, y]
-      end
-    end
-
-    best_moves.sort {|a, b| a.first.score <=> b.first.score}.last
+    return {:move => [n_suggested_card, n_x, n_y], :score => n_s}
   end
 
   # ply 1 only!
@@ -197,7 +174,9 @@ class TestGame
 
   def ai_move(turn)
     puts "AI is thinking..."
-    move = determine_ai_move(@board, @ai_hand, @player_hand)
+    output = determine_ai_move(@board, @ai_hand, @player_hand)
+    move = output[:move]
+    score = output[:score]
     system "clear"
     card, x, y = move
     @board.make_move(card, x, y)
@@ -205,6 +184,7 @@ class TestGame
 
     display_game
     puts "AI played a card to #{x}, #{y}... #{@board.open_spaces.count} spaces left."
+    puts "DEBUG: AI believes the board has a value of #{score}"
   end
 end
 
