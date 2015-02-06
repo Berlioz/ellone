@@ -19,6 +19,10 @@ class Card
     @color = color
   end
 
+  def serialize
+    [@north, @south, @east, @west, @color]
+  end
+
   def self.init_random(color=0)
     Card.new(1 + rand(10), 1 + rand(10), 1 + rand(10), 1 + rand(10), color)
   end

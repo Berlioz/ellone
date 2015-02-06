@@ -12,7 +12,7 @@ OptionParser.new do |opts|
 
   opts.on("-n", "--benchmark [DEPTH=8]", "ignore all other options and check how long negamax takes to resolve on your machine.") do |v|
     options[:benchmark_mode] = true
-    options[:benchmark_depth] = v.to_i || 8
+    options[:benchmark_depth] = v ? v.to_i : 8
   end
 
   #setup
@@ -23,7 +23,7 @@ OptionParser.new do |opts|
   options[:power_level] = 6
   opts.on("-r", "--random [POWER]", "with randomly generated hands (default)") do |v|
     options[:random_hands] = true
-    options[:power_level] = v || 6
+    options[:power_level] = v ? v.to_i : 6
   end
   opts.on("-o", "--open", "with selected hands for both players") do |v|
     options[:open] = true
@@ -68,7 +68,10 @@ if options[:benchmark_mode]
   r.same = true
   r.same_wall = true
   r.combo = true
-  b = Benchmark.new(options[:benchmark_depth])
+
+  blue_hand = Hand.new(1)
+  red_hand = Hand.new(2)
+  b = Benchmark.new(blue_hand, red_hand, options[:benchmark_depth])
   b.run
   exit!
 end
@@ -92,10 +95,10 @@ if options[:open]
     choice = gets.downcase.strip
     card_name = names.detect{|n| n.downcase == choice}
     if card_name.nil?
-      puts "That doesn't match any known cards...\n"
+      puts "That doesn't match any known cards...\n".colorize(:red)
     else
       blue_hand << [card_name, c.card_with_name(card_name)]
-      puts "Successfully added card; #{blue_hand.length} cards chosen."
+      puts "Successfully added card; hand is " + "#{blue_hand.map(&:first)}\n".colorize(:green)
     end
   end
 
@@ -104,10 +107,10 @@ if options[:open]
     choice = gets.downcase.strip
     card_name = names.detect{|n| n.downcase == choice}
     if card_name.nil?
-      puts "That doesn't match any known cards...\n"
+      puts "That doesn't match any known cards...\n".colorize(:red)
     else
       red_hand << [card_name, c.card_with_name(card_name)]
-      puts "Successfully added card; #{red_hand.length} cards chosen."
+      puts "Successfully added card; hand is " + "#{red_hand.map(&:first)}\n".colorize(:green)
     end
   end
   options[:blue_hand] = blue_hand
@@ -222,9 +225,10 @@ class Ellone
   end
 
   def get_input(hand)
-    puts "Input: card_letter x y (ex. c 2 3)\n"
+    puts "Input: card_substring x y (ex. red_giant 2 3)\n"
     input = $stdin.gets.gsub(',' , '').rstrip
     key, x, y = input.split
+    key = key.gsub("_", " ")
     unless key && x && y
       puts "Malformed expression...\n"
       return nil

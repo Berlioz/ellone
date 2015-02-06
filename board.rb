@@ -1,5 +1,6 @@
 require './card.rb'
 require './rules.rb'
+require 'msgpack'
 
 class Board
   def initialize(board=nil)
@@ -13,9 +14,10 @@ class Board
     @wall_card = Card.new(10, 10, 10, 10)
   end
 
-  # FUCK
-  def clone
-    Marshal::load(Marshal.dump(self))
+  def clone()
+    struct = @board.map{|row| row.map{|card| card.nil? ? nil : card.serialize}}
+    new_data = MessagePack.unpack(MessagePack.pack(struct))
+    Board.new(new_data.map{|row| row.map{|s| s.nil? ? nil : Card.new(s[0], s[1], s[2], s[3], s[4])}})
   end
 
   def wall_adjacency(x, y)

@@ -1,8 +1,8 @@
 class Benchmark
-  def initialize(depth)
+  def initialize(blue_hand, red_hand, depth)
     @board = Board.new
-    @blue_hand = Hand.new(1)
-    @red_hand = Hand.new(2)
+    @blue_hand = blue_hand
+    @red_hand = red_hand
     @depth = depth
   end
 

@@ -23,7 +23,8 @@ class NegamaxAgent
     @debug ? [@nodes, @leaves, @prunes] : nil
   end
 
-  def invoke
+  def invoke(corner_hack = false)
+    @corner_hack = true if corner_hack
     negamax(@base_board, @max_hand, @min_hand, @polarity, turns, -100, 100)
   end
 
@@ -35,7 +36,9 @@ class NegamaxAgent
 
   #@return [card, [x, y]]
   def generate_moves(player_hand, spaces)
-    if spaces.length == 9
+    if spaces == 9 && @corner_hack
+
+    elsif spaces.length == 9
       spaces = spaces.select{|x, y| x != 1 && y != 1}
       player_hand.product(spaces)
     else
@@ -50,7 +53,6 @@ class NegamaxAgent
 
   #@return [card, x, y, score]
   def negamax(board, max_hand, min_hand, polarity, depth_left, alpha, beta)
-    #binding.pry
     @nodes += 1 if @debug
     skip = false
     skipped_score = nil
@@ -71,6 +73,7 @@ class NegamaxAgent
         future = board.next_state(card, x, y)
         result = negamax(future, min_hand, max_hand - [card], polarity * -1, depth_left - 1, -1 * beta, -1 * alpha)
         score = -1 * result.last
+        
         if score > best_score_so_far
           best_score_so_far = score
           best_moves_so_far = [move]
