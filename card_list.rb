@@ -13,7 +13,7 @@ class CardList
       south = card[5] == "A" ? 10 : card[5].to_i
       west = card[6] == "A" ? 10 : card[6].to_i
       @ranks[rank.to_i] = {} if @ranks[rank.to_i].nil?
-      @ranks[rank.to_i][name] = {:north => north, :south => south, :east => east, :west => west}  
+      @ranks[rank.to_i][name] = {:north => north, :south => south, :east => east, :west => west}
     end
   end
 

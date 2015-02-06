@@ -28,21 +28,21 @@ class Hand
   # @return [Array] integers from 1-10 representing card ranks,
   # with a statistical distribution intended to make for an interesting game
   def generate_rank_spread
-  	def r(center)
+    def r(center)
       r = rand(100)
       if rand < 10
-      	[center - 2, 1].max
+        [center - 2, 1].max
       elsif rand < 35
-      	[center - 1, 1].max
+        [center - 1, 1].max
       elsif rand < 65
-      	center
+        center
       elsif rand < 90
-      	[center + 1, 10].min
+        [center + 1, 10].min
       else
-      	[center + 2, 10].min
+        [center + 2, 10].min
       end
-  	end
-  	center = [2,3,4,5,6,7,8,9].sample
+    end
+    center = [2,3,4,5,6,7,8,9].sample
     [r(center), r(center), r(center), r(center), r(center)]
   end
 
@@ -50,7 +50,7 @@ class Hand
     def pc(card, row)
       card.nil? ? "       " : card.row(row)
     end
-  	names = @hand.map(&:first).map {|name| '%-15.15s' % name}
+    names = @hand.map(&:first).map {|name| '%-15.15s' % name}
     cards = @hand.map(&:last)
     # a normal card is 7 characters across
     interstitial_length = 9
@@ -82,7 +82,7 @@ class Hand
   def remove_card(element)
     if element.is_a? Card
       @hand.each do |pair|
-      	name, card = pair
+        name, card = pair
         if card == element
           pair[1] = nil
           return
@@ -90,7 +90,7 @@ class Hand
       end
     else
       @hand.each do |pair|
-      	name, card = pair
+        name, card = pair
         if name == element
           pair[1] = nil
           return

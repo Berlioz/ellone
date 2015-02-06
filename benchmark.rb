@@ -14,7 +14,7 @@ class Benchmark
   end
 
   def benchmark_turn(color, turn_number)
-  	start_time = Time.now
+    start_time = Time.now
     n = NegamaxAgent.new(@board, get_active_hand(color).cards, get_passive_hand(color).cards, @depth, true)
     n_card, n_x, n_y, n_s = n.invoke
     debug_data = n.get_stats

@@ -29,8 +29,8 @@ class NegamaxAgent
 
   # depth function
   def turns
-   #@base_board.open_spaces.count > 7 ? [2, @difficulty].max : @difficulty
-   @difficulty
+    #@base_board.open_spaces.count > 7 ? [2, @difficulty].max : @difficulty
+    @difficulty
   end
 
   #@return [card, [x, y]]
@@ -45,13 +45,13 @@ class NegamaxAgent
 
   # W E L P
   def tiebreaker(candidates, board)
-  	candidates.first
+    candidates.first
   end
 
   #@return [card, x, y, score]
   def negamax(board, max_hand, min_hand, polarity, depth_left, alpha, beta)
     #binding.pry
-  	@nodes += 1 if @debug
+    @nodes += 1 if @debug
     skip = false
     skipped_score = nil
 
@@ -66,9 +66,9 @@ class NegamaxAgent
       best_score_so_far = -100
       best_moves_so_far = []
       moves.each do |move|
-      	card = move.first
-      	x, y = move.last
-      	future = board.next_state(card, x, y)
+        card = move.first
+        x, y = move.last
+        future = board.next_state(card, x, y)
         result = negamax(future, min_hand, max_hand - [card], polarity * -1, depth_left - 1, -1 * beta, -1 * alpha)
         score = -1 * result.last
         if score > best_score_so_far

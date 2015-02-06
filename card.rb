@@ -44,15 +44,15 @@ class Card
   def score
     @north + @south + @east + @west
   end
-  
+
   def a(i)
     i == 10 ? "A" : i.to_s
   end
 
   def to_s
     "[  #{a @north}  ]\n".colorize(COLORS[@color]) +
-      "[ #{a @west} #{a @east} ]\n".colorize(COLORS[@color]) + 
-      "[  #{a @south}  ]".colorize(COLORS[@color])
+        "[ #{a @west} #{a @east} ]\n".colorize(COLORS[@color]) +
+        "[  #{a @south}  ]".colorize(COLORS[@color])
   end
 
   def row(row)
