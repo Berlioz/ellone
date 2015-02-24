@@ -25,6 +25,7 @@ class NegamaxAgent
 
   def invoke(corner_hack = false)
     @corner_hack = true if corner_hack
+    p "DEBUG: initializing negamax base search with depth #{@difficulty}"
     negamax(@base_board, @max_hand, @min_hand, @polarity, turns, -100, 100)
   end
 
