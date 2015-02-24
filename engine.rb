@@ -44,7 +44,7 @@ class Engine
       human_color = 1
       if color == human_color
         human_turn(color)
-      elsif turn == 0 && @options[:first_manual]
+      elsif [0,1].include?(turn) && @options[:first_manual]
         human_turn(color)
       else
         ai_turn(color)
@@ -82,6 +82,11 @@ class Engine
 
   def human_turn(to_play)
     print_game_state unless @ongoing_game
+    if to_play == 1
+      puts "BLUE player to place a card.".colorize(:blue)
+    else
+      puts "RED player to place a card.".colorize(:red)
+    end
     hand = get_active_hand(to_play)
 
     player_move = nil

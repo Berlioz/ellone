@@ -74,10 +74,10 @@ OptionParser.new do |opts|
     options[:mode] = :test if v.downcase == "test"
   end
 
-  options[:depth] = 8
-  opts.on("-d", "--difficulty [DEPTH]", "AI evaluation depth (2-8) WARNING: hopelessly bad pre-horizon play below 8 right now") do |v|
+  options[:depth] = 9
+  opts.on("-d", "--difficulty [DEPTH]", "AI evaluation depth (2-9) WARNING: hopelessly bad pre-horizon play below 8 right now") do |v|
     i = v.to_i
-    options[:depth] = [[2, v.to_i].max, 8].min
+    options[:depth] = [[2, v.to_i].max, 9].min
   end
 end.parse!
 
