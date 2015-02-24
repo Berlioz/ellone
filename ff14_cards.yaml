@@ -1,0 +1,480 @@
+---
+1:
+  Dodo:
+    north: 4
+    south: 3
+    east: 2
+    west: 4
+    type: Dodo
+  Tonberry:
+    north: 2
+    south: 7
+    east: 2
+    west: 2
+    type: Tonberry
+  Sabotender:
+    north: 4
+    south: 3
+    east: 3
+    west: 3
+    type: Sabotender
+  Spriggan:
+    north: 2
+    south: 4
+    east: 3
+    west: 4
+    type: Spriggan
+  Pudding:
+    north: 2
+    south: 3
+    east: 4
+    west: 5
+    type: Pudding
+  Bomb:
+    north: 3
+    south: 3
+    east: 4
+    west: 3
+    type: Bomb
+  Mandragora:
+    north: 4
+    south: 5
+    east: 2
+    west: 3
+    type: Mandragora
+  Coblyn:
+    north: 3
+    south: 3
+    east: 3
+    west: 4
+    type: Coblyn
+  Morbol:
+    north: 5
+    south: 5
+    east: 2
+    west: 2
+    type: Morbol
+  Coeurl:
+    north: 2
+    south: 2
+    east: 5
+    west: 5
+    type: Coeurl
+  Ahriman:
+    north: 5
+    south: 2
+    east: 5
+    west: 2
+    type: Ahriman
+  Goobbue:
+    north: 2
+    south: 5
+    east: 5
+    west: 2
+    type: Goobbue
+  Chocobo:
+    north: 3
+    south: 2
+    east: 7
+    west: 1
+    type: Chocobo
+  Amalj'aa:
+    north: 1
+    south: 7
+    east: 4
+    west: 1
+    type: Amalj'aa
+  Ixal:
+    north: 6
+    south: 3
+    east: 1
+    west: 4
+    type: Ixal
+  Sylph:
+    north: 2
+    south: 5
+    east: 4
+    west: 4
+    type: Sylph
+  Sahagin:
+    north: 4
+    south: 3
+    east: 5
+    west: 3
+    type: Sahagin
+  Tataru Taru:
+    north: 7
+    south: 3
+    east: 2
+    west: 2
+    type: Tataru Taru
+  Moogle:
+    north: 2
+    south: 3
+    east: 1
+    west: 7
+    type: Moogle
+2:
+  Siren:
+    north: 3
+    south: 7
+    east: 6
+    west: 2
+    type: Siren
+  Ultros & Typhon:
+    north: 2
+    south: 6
+    east: 3
+    west: 7
+    type: Ultros & Typhon
+  Demon Wall:
+    north: 6
+    south: 2
+    east: 7
+    west: 3
+    type: Demon Wall
+  Succubus:
+    north: 7
+    south: 2
+    east: 3
+    west: 6
+    type: Succubus
+  Chimera:
+    north: 7
+    south: 2
+    east: 7
+    west: 2
+    type: Chimera
+  Blue Dragon:
+    north: 2
+    south: 7
+    east: 2
+    west: 7
+    type: Blue Dragon
+  Scarface Bugaal Ja:
+    north: 6
+    south: 2
+    east: 6
+    west: 6
+    type: Scarface Bugaal Ja
+  Momodi Modi:
+    north: 7
+    south: 5
+    east: 5
+    west: 3
+    type: Momodi Modi
+  Baderon Tenfingers:
+    north: 3
+    south: 5
+    east: 7
+    west: 5
+    type: Baderon Tenfingers
+  Mouther Miounne:
+    north: 5
+    south: 3
+    east: 5
+    west: 7
+    type: Mouther Miounne
+  Livia sas Junius:
+    north: 3
+    south: 7
+    east: 7
+    west: 1
+    type: Livia sas Junius
+  Rhitahtyn sas Arvina:
+    north: 7
+    south: 3
+    east: 1
+    west: 7
+    type: Rhitahtyn sas Arvina
+  Biggs & Wedge:
+    north: 5
+    south: 7
+    east: 3
+    west: 5
+    type: Biggs & Wedge
+  Gerolt:
+    north: 1
+    south: 3
+    east: 7
+    west: 7
+    type: Gerolt
+  Frixio:
+    north: 6
+    south: 6
+    east: 2
+    west: 6
+    type: Frixio
+  Mutamix Bubblypots:
+    north: 2
+    south: 6
+    east: 6
+    west: 6
+    type: Mutamix Bubblypots
+  Memeroon:
+    north: 6
+    south: 6
+    east: 6
+    west: 2
+    type: Memeroon
+3:
+  Behemoth:
+    north: 7
+    south: 4
+    east: 8
+    west: 2
+    type: Behemoth
+  Gilgamesh & Enkidu:
+    north: 8
+    south: 7
+    east: 3
+    west: 3
+    type: Gilgamesh & Enkidu
+  Ifrit:
+    north: 7
+    south: 6
+    east: 1
+    west: 7
+    type: Ifrit
+  Titan:
+    north: 1
+    south: 7
+    east: 7
+    west: 6
+    type: Titan
+  Garuda:
+    north: 7
+    south: 1
+    east: 6
+    west: 7
+    type: Garuda
+  Good King Moggle Mog XIII:
+    north: 7
+    south: 7
+    east: 6
+    west: 1
+    type: Good King Moggle Mog XIII
+  Raya-O-Senna & A-Ruhn-Senna:
+    north: 5
+    south: 6
+    east: 6
+    west: 6
+    type: Raya-O-Senna & A-Ruhn-Senna
+  Godbert Manderville:
+    north: 6
+    south: 5
+    east: 6
+    west: 6
+    type: Godbert Manderville
+  Thancred:
+    north: 2
+    south: 8
+    east: 3
+    west: 7
+    type: Thancred
+  Nero tol Scaeva:
+    north: 4
+    south: 8
+    east: 1
+    west: 7
+    type: Nero tol Scaeva
+  Papalymo & Yda:
+    north: 3
+    south: 8
+    east: 7
+    west: 2
+    type: Papalymo & Yda
+  Y'shtola:
+    north: 7
+    south: 1
+    east: 8
+    west: 4
+    type: Y'shtola
+  Urianger:
+    north: 8
+    south: 4
+    east: 1
+    west: 7
+    type: Urianger
+4:
+  Ultima Weapon:
+    north: 7
+    south: 9
+    east: 8
+    west: 1
+    type: Ultima Weapon
+  Odin:
+    north: 8
+    south: 1
+    east: 8
+    west: 8
+    type: Odin
+  Ramuh:
+    north: 8
+    south: 8
+    east: 1
+    west: 8
+    type: Ramuh
+  Leviathan:
+    north: 8
+    south: 8
+    east: 8
+    west: 1
+    type: Leviathan
+  Shiva:
+    north: 1
+    south: 8
+    east: 8
+    west: 8
+    type: Shiva
+  Minfilia:
+    north: 9
+    south: 3
+    east: 8
+    west: 5
+    type: Minfilia
+  Lahabrea:
+    north: 4
+    south: 4
+    east: 9
+    west: 8
+    type: Lahabrea
+  Cid Garlond:
+    north: 5
+    south: 9
+    east: 9
+    west: 2
+    type: Cid Garlond
+  Alphinaud & Alisale:
+    north: 9
+    south: 3
+    east: 3
+    west: 9
+    type: Alphinaud & Alisale
+  Louisoix Leveilleur:
+    north: 9
+    south: 9
+    east: 4
+    west: 3
+    type: Louisoix Leveilleur
+5:
+  Bahamut:
+    north: 9
+    south: 9
+    east: 5
+    west: 6
+    type: Bahamut
+  Hildibrand & Nashu Mhakaracca:
+    north: 1
+    south: 10
+    east: 8
+    west: 8
+    type: Hildibrand & Nashu Mhakaracca
+  Nanamo Ul Namo:
+    north: 10
+    south: 4
+    east: 6
+    west: 8
+    type: Nanamo Ul Namo
+  Gaius van Baelsar:
+    north: 4
+    south: 5
+    east: 10
+    west: 9
+    type: Gaius van Baelsar
+  Merlwyb Bloefhiswyn:
+    north: 5
+    south: 10
+    east: 9
+    west: 3
+    type: Merlwyb Bloefhiswyn
+  Kan-E-Senna:
+    north: 9
+    south: 1
+    east: 10
+    west: 7
+    type: Kan-E-Senna
+  Raubahn Aldynn:
+    north: 6
+    south: 9
+    east: 2
+    west: 10
+    type: Raubahn Aldynn
+  Warrior of Light:
+    north: 10
+    south: 5
+    east: 2
+    west: 10
+    type: Warrior of Light
+  Firion:
+    north: 10
+    south: 10
+    east: 5
+    west: 1
+    type: Firion
+  Onion Knight:
+    north: 8
+    south: 8
+    east: 2
+    west: 10
+    type: Onion Knight
+  Cecil Harvey:
+    north: 4
+    south: 4
+    east: 10
+    west: 10
+    type: Cecil Harvey
+  Bartz Klauser:
+    north: 4
+    south: 10
+    east: 4
+    west: 0
+    type: Bartz Klauser
+  Terra Branford:
+    north: 10
+    south: 2
+    east: 0
+    west: 5
+    type: Terra Branford
+  Cloud Strife:
+    north: 9
+    south: 9
+    east: 3
+    west: 8
+    type: Cloud Strife
+  Squall Leonhart:
+    north: 6
+    south: 0
+    east: 10
+    west: 1
+    type: Squall Leonhart
+  Zidane Tribal:
+    north: 5
+    south: 6
+    east: 10
+    west: 8
+    type: Zidane Tribal
+  Tidus:
+    north: 10
+    south: 1
+    east: 7
+    west: 9
+    type: Tidus
+  Shantotto:
+    north: 4
+    south: 7
+    east: 9
+    west: 9
+    type: Shantotto
+  Vaan:
+    north: 1
+    south: 10
+    east: 7
+    west: 9
+    type: Vaan
+  Lightning:
+    north: 9
+    south: 7
+    east: 1
+    west: 10
+    type: Lightning

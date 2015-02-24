@@ -20,10 +20,10 @@ OptionParser.new do |opts|
     options[:switch] = true
   end
   options[:random_hands] = true
-  options[:power_level] = 6
+  options[:power_level] = 3
   opts.on("-r", "--random [POWER]", "with randomly generated hands (default)") do |v|
     options[:random_hands] = true
-    options[:power_level] = v ? v.to_i : 6
+    options[:power_level] = v ? v.to_i : 3
   end
   opts.on("-o", "--open", "with selected hands for both players") do |v|
     options[:random_hands] = false
@@ -83,6 +83,7 @@ if options[:benchmark_mode]
   r.same = true
   r.same_wall = true
   r.combo = true
+  r.ascension = true
 
   blue_hand = Hand.from_random(1)
   red_hand = Hand.from_random(2)
@@ -111,24 +112,42 @@ if options[:open]
   p names
 
   while blue_hand.length < 5
-    puts "Filling blue player's hand; please enter a card name.\n"
+    puts "Filling #{"blue".colorize(:light_blue)} player's hand; please enter a card name.\n"
     choice = gets.downcase.strip
     card_name = names.detect{|n| n.downcase == choice}
     if card_name.nil?
-      puts "That doesn't match any known cards...\n".colorize(:red)
-    else
+      substring_matches = names.select{|n| n.downcase.include?(choice)}
+      if substring_matches.empty?
+        puts "That doesn't match any known cards...\n".colorize(:red)
+      elsif substring_matches.length > 1
+        puts "#{choice} substring is ambiguous; options are #{substring_matches}"
+      else
+        card_name = substring_matches.first
+      end
+    end
+
+    if card_name
       blue_hand << [card_name, c.card_with_name(card_name)]
       puts "Successfully added card; hand is " + "#{blue_hand.map(&:first)}\n".colorize(:green)
     end
   end
 
   while red_hand.length < 5
-    puts "Filling red player's hand; please enter a card name.\n"
+    puts "Filling #{"red".colorize(:red)} player's hand; please enter a card name.\n"
     choice = gets.downcase.strip
     card_name = names.detect{|n| n.downcase == choice}
     if card_name.nil?
-      puts "That doesn't match any known cards...\n".colorize(:red)
-    else
+      substring_matches = names.select{|n| n.downcase.include?(choice)}
+      if substring_matches.empty?
+        puts "That doesn't match any known cards...\n".colorize(:red)
+      elsif substring_matches.length > 1
+        puts "#{choice} substring is ambiguous; options are #{substring_matches}"
+      else
+        card_name = substring_matches.first
+      end
+    end
+
+    if card_name
       red_hand << [card_name, c.card_with_name(card_name)]
       puts "Successfully added card; hand is " + "#{red_hand.map(&:first)}\n".colorize(:green)
     end
@@ -142,8 +161,8 @@ class Ellone
     @options = options
     @board = Board.new
     if options[:random_hands]
-      @blue_hand = Hand.from_random(1)
-      @red_hand = Hand.from_random(2)
+      @blue_hand = Hand.from_random(1, options[:power_level])
+      @red_hand = Hand.from_random(2, options[:power_level])
     else
       @blue_hand = Hand.new(1, options[:blue_hand])
       @red_hand = Hand.new(2, options[:red_hand])

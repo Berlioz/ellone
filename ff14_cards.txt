@@ -1,0 +1,80 @@
+Dodo 4 2 3 4 1
+Tonberry 2 2 7 2 1
+Sabotender 4 3 3 3 1
+Spriggan 2 3 4 4 1
+Pudding 2 4 3 5 1
+Bomb 3 4 3 3 1
+Mandragora 4 2 5 3 1
+Coblyn 3 3 3 4 1
+Morbol 5 2 5 2 1
+Coeurl 2 5 2 5 1
+Ahriman 5 5 2 2 1
+Goobbue 2 5 5 2 1
+Chocobo 3 7 2 1 1
+Amalj'aa 1 4 7 1 1
+Ixal 6 1 3 4 1
+Sylph 2 4 5 4 1
+Sahagin 4 5 3 3 1
+Tataru Taru 7 2 3 2 1
+Moogle 2 1 3 7 1
+Siren 3 6 7 2 2
+Ultros & Typhon 2 3 6 7 2
+Demon Wall 6 7 2 3 2
+Succubus 7 3 2 6 2
+Chimera 7 7 2 2 2
+Blue Dragon 2 2 7 7 2
+Scarface Bugaal Ja 6 6 2 6 2
+Momodi Modi 7 5 5 3 2
+Baderon Tenfingers 3 7 5 5 2
+Mouther Miounne 5 5 3 7 2
+Livia sas Junius 3 7 7 1 2
+Rhitahtyn sas Arvina 7 1 3 7 2
+Biggs & Wedge 5 3 7 5 2
+Gerolt 1 7 3 7 2
+Frixio 6 2 6 6 2
+Mutamix Bubblypots 2 6 6 6 2
+Memeroon 6 6 6 2 2
+Behemoth 7 8 4 2 3
+Gilgamesh & Enkidu 8 3 7 3 3
+Ifrit 7 1 6 7 3
+Titan 1 7 7 6 3
+Garuda 7 6 1 7 3
+Good King Moggle Mog XIII 7 6 7 1 3
+Raya-O-Senna & A-Ruhn-Senna 5 6 6 6 3
+Godbert Manderville 6 6 5 6 3
+Thancred 2 3 8 7 3
+Nero tol Scaeva 4 1 8 7 3
+Papalymo & Yda 3 7 8 2 3
+Y'shtola 7 8 1 4 3
+Urianger 8 1 4 7 3
+Ultima Weapon 7 8 9 1 4
+Odin 8 8 1 8 4
+Ramuh 8 1 8 8 4
+Leviathan 8 8 8 1 4
+Shiva 1 8 8 8 4
+Minfilia 9 8 3 5 4
+Lahabrea 4 9 4 8 4
+Cid Garlond 5 9 9 2 4
+Alphinaud & Alisale 9 3 3 9 4
+Louisoix Leveilleur 9 4 9 3 4
+Bahamut 9 5 9 6 5
+Hildibrand & Nashu Mhakaracca 1 8 10 8 5
+Nanamo Ul Namo 10 6 4 8 5
+Gaius van Baelsar 4 10 5 9 5
+Merlwyb Bloefhiswyn 5 9 10 3 5
+Kan-E-Senna 9 10 1 7 5
+Raubahn Aldynn 6 2 9 10 5
+Warrior of Light 10 2 5 10 5
+Firion 10 2 5 10 5
+Firion 10 5 10 1 5
+Onion Knight 8 2 8 10 5
+Cecil Harvey 4 10 4 10 5
+Bartz Klauser 4 4 10 A 5
+Terra Branford 10 A 2 5 5
+Cloud Strife 9 3 9 8 5
+Squall Leonhart 6 10 A 1 5
+Zidane Tribal 5 10 6 8 5
+Tidus 10 7 1 9 5
+Shantotto 4 9 7 9 5
+Vaan 1 7 10 9 5
+Lightning 9 1 7 10 5

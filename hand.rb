@@ -38,12 +38,12 @@ class Hand
       elsif rng < 65
         center
       elsif rng < 90
-        [center + 1, 10].min
+        [center + 1, 5].min
       else
-        [center + 2, 10].min
+        [center + 2, 5].min
       end
     end
-    center = center || [2,3,4,5,6,7,8,9].sample
+    center = center || [1,2,3,4,5].sample
     [r(center), r(center), r(center), r(center), r(center)]
   end
 
@@ -59,13 +59,13 @@ class Hand
       "#{card.type} (#{ascension})"
     end
     names = @hand.map(&:first).map {|name| '%-15.15s' % name}
-    types = @hand.map(&:last).map{|card| '%-15.15s' % card_type_line(card, current_board)}
+    types = @hand.map(&:last).map{|card| '%-15.15s' % card_type_line(card, current_board)} if (Rules.instance.ascension || Rules.instance.descension)
     cards = @hand.map(&:last)
     # a normal card is 7 characters across
     interstitial_length = 9
     i = ' ' * interstitial_length
     rv =  "#{names[0]} #{names[1]} #{names[2]} #{names[3]} #{names[4]}\n".colorize(:green)
-    rv += "#{types[0]} #{types[1]} #{types[2]} #{types[3]} #{types[4]}\n"
+    rv += "#{types[0]} #{types[1]} #{types[2]} #{types[3]} #{types[4]}\n" if (Rules.instance.ascension || Rules.instance.descension)
     rv += "#{pc(cards[0], 0)}#{i}#{pc(cards[1], 0)}#{i}#{pc(cards[2], 0)}#{i}#{pc(cards[3], 0)}#{i}#{pc(cards[4], 0)}\n"
     rv += "#{pc(cards[0], 1)}#{i}#{pc(cards[1], 1)}#{i}#{pc(cards[2], 1)}#{i}#{pc(cards[3], 1)}#{i}#{pc(cards[4], 1)}\n"
     rv += "#{pc(cards[0], 2)}#{i}#{pc(cards[1], 2)}#{i}#{pc(cards[2], 2)}#{i}#{pc(cards[3], 2)}#{i}#{pc(cards[4], 2)}\n"
