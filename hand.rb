@@ -3,21 +3,22 @@ require './card_list.rb'
 class Hand
   attr_accessor :hand
 
-  def initialize(color, hand = nil)
-    if hand
-      @hand = hand
-      @hand.each do |name, card|
-        card.color = color
-      end
-    else
-      @hand = random_cards(color)
+  def self.from_random(color, strength = nil)
+    generated_hand = Hand.random_cards(color, strength)
+    Hand.new(color, generated_hand)
+  end
+
+  def initialize(color, hand)
+    @hand = hand
+    @hand.each do |name, card|
+      card.color = color
     end
   end
 
-  def random_cards(color)
+  def self.random_cards(color, strength = nil)
     card_list = CardList.new
     rv = []
-    generate_rank_spread.each do |rank|
+    generate_rank_spread(strength).each do |rank|
       name, card = card_list.card_with_rank(rank)
       card.color = color
       rv << [name, card]
@@ -27,35 +28,44 @@ class Hand
 
   # @return [Array] integers from 1-10 representing card ranks,
   # with a statistical distribution intended to make for an interesting game
-  def generate_rank_spread
-    def r(center)
-      r = rand(100)
-      if rand < 10
+  def self.generate_rank_spread(center=nil)
+    def self.r(center)
+      rng = rand(100)
+      if rng < 10
         [center - 2, 1].max
-      elsif rand < 35
+      elsif rng < 35
         [center - 1, 1].max
-      elsif rand < 65
+      elsif rng < 65
         center
-      elsif rand < 90
+      elsif rng < 90
         [center + 1, 10].min
       else
         [center + 2, 10].min
       end
     end
-    center = [2,3,4,5,6,7,8,9].sample
+    center = center || [2,3,4,5,6,7,8,9].sample
     [r(center), r(center), r(center), r(center), r(center)]
   end
 
-  def to_s
+  def to_s(current_board = nil)
     def pc(card, row)
       card.nil? ? "       " : card.row(row)
     end
+    def card_type_line(card, current_board)
+      return "" if card.nil?
+      return "#{card.type}" if current_board.nil?
+      ascension = current_board.ascension(card)
+      ascension = (ascension >= 0 ? ("+" + ascension.to_s) : ascension.to_s)
+      "#{card.type} (#{ascension})"
+    end
     names = @hand.map(&:first).map {|name| '%-15.15s' % name}
+    types = @hand.map(&:last).map{|card| '%-15.15s' % card_type_line(card, current_board)}
     cards = @hand.map(&:last)
     # a normal card is 7 characters across
     interstitial_length = 9
     i = ' ' * interstitial_length
     rv =  "#{names[0]} #{names[1]} #{names[2]} #{names[3]} #{names[4]}\n".colorize(:green)
+    rv += "#{types[0]} #{types[1]} #{types[2]} #{types[3]} #{types[4]}\n"
     rv += "#{pc(cards[0], 0)}#{i}#{pc(cards[1], 0)}#{i}#{pc(cards[2], 0)}#{i}#{pc(cards[3], 0)}#{i}#{pc(cards[4], 0)}\n"
     rv += "#{pc(cards[0], 1)}#{i}#{pc(cards[1], 1)}#{i}#{pc(cards[2], 1)}#{i}#{pc(cards[3], 1)}#{i}#{pc(cards[4], 1)}\n"
     rv += "#{pc(cards[0], 2)}#{i}#{pc(cards[1], 2)}#{i}#{pc(cards[2], 2)}#{i}#{pc(cards[3], 2)}#{i}#{pc(cards[4], 2)}\n"

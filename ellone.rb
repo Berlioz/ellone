@@ -26,10 +26,28 @@ OptionParser.new do |opts|
     options[:power_level] = v ? v.to_i : 6
   end
   opts.on("-o", "--open", "with selected hands for both players") do |v|
+    options[:random_hands] = false
     options[:open] = true
   end
 
-  #rules
+  #ff14 rules
+  opts.on("-O", "--order", "with ORDER rule") do |v|
+    options[:order] = true
+  end  
+  opts.on("-R", "--reverse", "with REVERSE rule") do |v|
+    options[:reverse] = true
+  end
+  opts.on("-F", "--fallen", "with FALLEN rule") do |v|
+    options[:fallen] = true
+  end
+  opts.on("-A", "--ascension", "with ASCENSION rule") do |v|
+    options[:ascension] = true
+  end
+  opts.on("-D", "--descension", "with DESCENSION rule") do |v|
+    options[:descension] = true
+  end
+
+  #ff8 rules
   opts.on("-p", "--plus", "with PLUS rule") do |v|
     options[:plus] = true
   end
@@ -41,9 +59,6 @@ OptionParser.new do |opts|
   end
   opts.on("-c", "--combo", "with COMBO rule") do |v|
     options[:combo] = true
-  end
-  opts.on("-e", "--elemental", "setting up ELEMENTAL tiles (UNIMPLEMENTED)") do |v|
-    options[:elemental] = true
   end
 
   #operating mode
@@ -69,8 +84,8 @@ if options[:benchmark_mode]
   r.same_wall = true
   r.combo = true
 
-  blue_hand = Hand.new(1)
-  red_hand = Hand.new(2)
+  blue_hand = Hand.from_random(1)
+  red_hand = Hand.from_random(2)
   b = Benchmark.new(blue_hand, red_hand, options[:benchmark_depth])
   b.run
   exit!
@@ -82,6 +97,11 @@ r.plus = true if options[:plus]
 r.same = true if options[:same]
 r.same_wall = true if options[:same_wall]
 r.combo = true if options[:combo]
+r.order = true if options[:order]
+r.reverse = true if options[:reverse]
+r.fallen = true if options[:fallen]
+r.ascension = true if options[:ascension]
+r.descension = true if options[:descension]
 
 if options[:open]
   c = CardList.new
@@ -121,9 +141,9 @@ class Ellone
   def initialize(options)
     @options = options
     @board = Board.new
-    if options[:random]
-      @blue_hand = Hand.new(1)
-      @red_hand = Hand.new(2)
+    if options[:random_hands]
+      @blue_hand = Hand.from_random(1)
+      @red_hand = Hand.from_random(2)
     else
       @blue_hand = Hand.new(1, options[:blue_hand])
       @red_hand = Hand.new(2, options[:red_hand])
@@ -133,8 +153,8 @@ class Ellone
 
   def print_game_state
     puts @board
-    puts @blue_hand
-    puts @red_hand
+    puts @blue_hand.to_s(@board)
+    puts @red_hand.to_s(@board)
   end
 
   def run
@@ -228,6 +248,10 @@ class Ellone
     puts "Input: card_substring x y (ex. red_giant 2 3)\n"
     input = $stdin.gets.gsub(',' , '').rstrip
     key, x, y = input.split
+    if key == "debug"
+      binding.pry
+      nil
+    end
     key = key.gsub("_", " ")
     unless key && x && y
       puts "Malformed expression...\n"
@@ -243,7 +267,6 @@ class Ellone
   end
 
 end
-
 
 e = Ellone.new(options)
 e.run

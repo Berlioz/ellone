@@ -11,13 +11,14 @@ class Board
                  [nil, nil, nil],
                  [nil, nil, nil] ]
     end
-    @wall_card = Card.new(10, 10, 10, 10)
+    @wall_card = Card.new(10, 10, 10, 10, "w@ll")
   end
 
+  # in lieu of an actual serialization scheme, have an extremely lazy a pastiche
   def clone()
     struct = @board.map{|row| row.map{|card| card.nil? ? nil : card.serialize}}
     new_data = MessagePack.unpack(MessagePack.pack(struct))
-    Board.new(new_data.map{|row| row.map{|s| s.nil? ? nil : Card.new(s[0], s[1], s[2], s[3], s[4])}})
+    Board.new(new_data.map{|row| row.map{|s| s.nil? ? nil : Card.from_ary(s)}})
   end
 
   def wall_adjacency(x, y)
@@ -76,11 +77,12 @@ class Board
   # resolve captures due to the card at x,y being placed
   def rank_captures(x, y)
     placed_card = @board[x][y]
+    asc = ascension(placed_card)
     adjacencies = adjacency(x, y)
     adjacencies.each do |direction, other_card|
       next unless other_card
       if other_card.color != placed_card.color
-        if placed_card.flips?(other_card, direction)
+        if placed_card.flips?(other_card, direction, asc, ascension(other_card))
           other_card.color = placed_card.color
         end
       end
@@ -91,12 +93,13 @@ class Board
   def plus_captures(x,y)
     side_sums = {}
     placed_card = @board[x][y]
+    asc = ascension(placed_card)
     adjacencies = adjacency(x, y)
 
     # determine the sum in all directions
     adjacencies.each do |direction, other_card|
       next unless other_card
-      sum = placed_card.plus_sum(other_card, direction)
+      sum = placed_card.plus_sum(other_card, direction, asc, ascension(other_card))
       side_sums[sum] ? side_sums[sum] << other_card : side_sums[sum] = [other_card]
     end
 
@@ -116,12 +119,13 @@ class Board
   def same_captures(x,y)
     matches = []
     placed_card = @board[x][y]
+    asc = ascension(placed_card)
     adjacencies = adjacency(x, y)
 
     # determine the sum in all directions
     adjacencies.each do |direction, other_card|
       next unless other_card
-      match = placed_card.same_match?(other_card, direction)
+      match = placed_card.same_match?(other_card, direction, asc, ascension(other_card))
       if match
         matches << other_card
       end
@@ -142,11 +146,12 @@ class Board
   def same_wall_captures(x,y)
     matches = []
     placed_card = @board[x][y]
+    asc = ascension(placed_card)
     adjacencies = wall_adjacency(x,y)
     # determine the sum in all directions
     adjacencies.each do |direction, other_card|
       next unless other_card
-      match = placed_card.same_match?(other_card, direction)
+      match = placed_card.same_match?(other_card, direction, asc, ascension(other_card))
       if match
         matches << other_card
       end
@@ -178,6 +183,13 @@ class Board
 
     # at this point, we know that our base is card at x, y
     rank_captures(x, y)
+  end
+
+  def ascension(card)
+    return 0 unless (Rules.instance.ascension || Rules.instance.descension)
+    count = @board.flatten.select{|c| c && c.type == card.type}.count
+    count = count * -1 if Rules.instance.descension
+    count
   end
 
   # [  A  ] [  5  ]

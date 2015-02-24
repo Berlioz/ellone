@@ -36,9 +36,8 @@ class NegamaxAgent
 
   #@return [card, [x, y]]
   def generate_moves(player_hand, spaces)
-    if spaces == 9 && @corner_hack
-
-    elsif spaces.length == 9
+    player_hand = [player_hand.first] if Rules.instance.order
+    if spaces.length == 9
       spaces = spaces.select{|x, y| x != 1 && y != 1}
       player_hand.product(spaces)
     else
