@@ -1,5 +1,11 @@
 ---
 1:
+  Fwee:
+    north: 1
+    south: 1
+    east: 1
+    west: 1
+    type: fwee
   Kobold:
     north: 2
     south: 4

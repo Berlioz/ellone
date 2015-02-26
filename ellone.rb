@@ -126,7 +126,7 @@ unless options[:random_hands]
   red_hand = []
   p names
 
-  unless options[:mode] == :manual #non-open games do not let you see the CPU's hand anyway
+  unless options[:closed] #fully closed games do not let you see the CPU's hand anyway
     if options[:blue_set]
       preselected = File.open("blue_cards.txt").read
       preselected.each_line do |name|
@@ -200,6 +200,8 @@ if ['Y', 'y', 'yes', 'YES'].include?(choice.strip)
 else
   options[:switch] = true
 end
+
+system "clear"
 
 if options[:closed]
   e = HintEngine.new(options)
