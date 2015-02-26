@@ -189,6 +189,7 @@ class Board
 
   def ascension(card)
     return 0 unless (Rules.instance.ascension || Rules.instance.descension)
+    return 0 unless card.type != "none"
     count = @board.flatten.select{|c| c && c.type == card.type}.count
     count = count * -1 if Rules.instance.descension
     count
