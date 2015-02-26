@@ -1,5 +1,11 @@
 ---
 1:
+  Kobold:
+    north: 2
+    south: 4
+    east: 2
+    west: 6
+    type: Kobold
   Dodo:
     north: 4
     south: 3
@@ -444,7 +450,7 @@
     type: Cloud Strife
   Squall Leonhart:
     north: 6
-    south: 0
+    south: 10
     east: 10
     west: 1
     type: Squall Leonhart

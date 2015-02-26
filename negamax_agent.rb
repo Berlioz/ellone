@@ -47,8 +47,23 @@ class NegamaxAgent
   end
 
   # W E L P
-  def tiebreaker(candidates, board)
-    candidates.first
+  def tiebreaker(candidates, board, max_color)
+    best_score_so_far = -100
+    best_move_so_far = nil
+
+    candidates.each do |move|
+      card = move.first
+      x, y = move.last
+      future = board.next_state(card, x, y)
+      result = board.score(max_color)
+
+      if result > best_score_so_far
+        best_score_so_far = result
+        best_move_so_far = move
+      end
+    end
+
+    best_move_so_far
   end
 
   #@return [card, x, y, score]
@@ -73,7 +88,7 @@ class NegamaxAgent
         future = board.next_state(card, x, y)
         result = negamax(future, min_hand, max_hand - [card], polarity * -1, depth_left - 1, -1 * beta, -1 * alpha)
         score = -1 * result.last
-        
+
         if score > best_score_so_far
           best_score_so_far = score
           best_moves_so_far = [move]
@@ -88,7 +103,7 @@ class NegamaxAgent
         end
       end
 
-      best_move = tiebreaker(best_moves_so_far, board)
+      best_move = tiebreaker(best_moves_so_far, board, max_hand.first.color)
       [best_move.first, best_move.last.first, best_move.last.last, best_score_so_far]
     end
 

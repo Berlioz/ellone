@@ -14,7 +14,7 @@ class Board
     @wall_card = Card.new(10, 10, 10, 10, "w@ll")
   end
 
-  # in lieu of an actual serialization scheme, have an extremely lazy a pastiche
+  # in lieu of an actual serialization scheme, have an extremely lazy pastiche
   def clone()
     struct = @board.map{|row| row.map{|card| card.nil? ? nil : card.serialize}}
     new_data = MessagePack.unpack(MessagePack.pack(struct))

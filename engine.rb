@@ -83,7 +83,7 @@ class Engine
   def human_turn(to_play)
     print_game_state unless @ongoing_game
     if to_play == 1
-      puts "BLUE player to place a card.".colorize(:blue)
+      puts "BLUE player to place a card.".colorize(:light_blue)
     else
       puts "RED player to place a card.".colorize(:red)
     end
@@ -121,6 +121,7 @@ class Engine
       binding.pry
       nil
     end
+	key = "" if key.nil?
     key = key.gsub("_", " ")
     unless key && x && y
       puts "Malformed expression...\n"

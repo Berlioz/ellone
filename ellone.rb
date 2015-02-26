@@ -5,6 +5,7 @@ require './board.rb'
 require './hand.rb'
 require './benchmark.rb'
 require './engine.rb'
+require './hint_engine.rb'
 
 options = {}
 OptionParser.new do |opts|
@@ -21,28 +22,38 @@ OptionParser.new do |opts|
     options[:first_manual] = true
   end
 
-  options[:saved_hand] = true
-  opts.on("-o", "--open", "with a saved red hand and a selected blue hand (default)") do |v|
-   #options[:saved_hand] = true
+  options[:open] = true
+  opts.on("-o", "--open", "with red and blue hands; full game tree eval (DEFAULT)") do |v|
+    # options[:open] = true
   end
+  opts.on("-l", "--closed", "with only a red hand; one move lookahead mode") do |v|
+    options[:open] = false
+    options[:closed] = true
+  end
+  opts.on("-3", "--three-open", "with three known blue cards; two move greedy lookahead moode (UNIMPLEMENTED") do |v|
+    options[:open] = false
+    options[:three_open] = true
+  end
+
   opts.on("-r", "--random [POWER]", "with randomly generated hands") do |v|
     options[:random_hands] = true
     options[:power_level] = v ? v.to_i : 3
-    options[:saved_hand] = false
   end
-  opts.on("-a", "--allopen", "with selected hands for both players") do |v|
-    options[:open] = true
-    options[:saved_hand] = false
+  opts.on("-h", "--hand", "loading a hand from red_hand.txt instead of selecting cards") do |v|
+    options[:red_hand] = true
+  end
+  opts.on('-b', '--blueset', "loading a hand from blue_cards.txt instead of selecting cards") do |v|
+    options[:blue_set] = true
   end
 
   #ff14 rules
   opts.on("-O", "--order", "with ORDER rule") do |v|
     options[:order] = true
-  end  
+  end
   opts.on("-R", "--reverse", "with REVERSE rule") do |v|
     options[:reverse] = true
   end
-  opts.on("-F", "--fallen", "with FALLEN rule") do |v|
+  opts.on("-F", "--fallen", "with FALLEN ACE rule") do |v|
     options[:fallen] = true
   end
   opts.on("-A", "--ascension", "with ASCENSION rule") do |v|
@@ -53,17 +64,16 @@ OptionParser.new do |opts|
   end
 
   #ff8 rules
-  opts.on("-p", "--plus", "with PLUS rule") do |v|
+  opts.on("-p", "--plus", "with PLUS COMBO rule") do |v|
     options[:plus] = true
+    options[:combo] = true
   end
-  opts.on("-s", "--same", "with SAME rule") do |v|
+  opts.on("-s", "--same", "with SAME COMBO rule") do |v|
     options[:same] = true
+    options[:combo] = true
   end
   opts.on("-w", "--wall", "with WALL rule") do |v|
     options[:same_wall] = true
-  end
-  opts.on("-c", "--combo", "with COMBO rule") do |v|
-    options[:combo] = true
   end
 
   #operating mode
@@ -77,7 +87,7 @@ OptionParser.new do |opts|
   options[:depth] = 9
   opts.on("-d", "--difficulty [DEPTH]", "AI evaluation depth (2-9) WARNING: hopelessly bad pre-horizon play below 8 right now") do |v|
     i = v.to_i
-    options[:depth] = [[2, v.to_i].max, 9].min
+    options[:depth] = [[1, v.to_i].max, 9].min
   end
 end.parse!
 
@@ -109,15 +119,6 @@ r.fallen = true if options[:fallen]
 r.ascension = true if options[:ascension]
 r.descension = true if options[:descension]
 
-puts "Should the blue player (manual input/your opponent) take the first move? Y/N"
-puts " (i.e are you playing second in the FF14 client)"
-choice = gets
-if ['Y', 'y', 'yes', 'YES'].include?(choice.strip)
-  options[:switch] = false
-else
-  options[:switch] = true
-end
-
 unless options[:random_hands]
   c = CardList.new
   names = c.all_card_names
@@ -125,33 +126,44 @@ unless options[:random_hands]
   red_hand = []
   p names
 
-    while blue_hand.length < 5
-      puts "Filling #{"blue (human)".colorize(:light_blue)} player's hand; please enter a card name.\n"
-      choice = gets.downcase.strip
-      card_name = names.detect{|n| n.downcase == choice}
-      if card_name.nil?
-        substring_matches = names.select{|n| n.downcase.include?(choice)}
-        if substring_matches.empty?
-          puts "That doesn't match any known cards...\n".colorize(:red)
-        elsif substring_matches.length > 1
-          puts "#{choice} substring is ambiguous; options are #{substring_matches}"
-        else
-          card_name = substring_matches.first
+  unless options[:mode] == :manual #non-open games do not let you see the CPU's hand anyway
+    if options[:blue_set]
+      preselected = File.open("blue_cards.txt").read
+      preselected.each_line do |name|
+        card_name = names.detect{|n| n.downcase == name.downcase.strip}
+        raise "tried to load unknown card #{name}" if card_name.nil?
+        blue_hand << [card_name, c.card_with_name(card_name)]
+      end
+    else
+      while blue_hand.length < 5
+        puts "Filling #{"blue (human)".colorize(:light_blue)} player's hand; please enter a card name.\n"
+        choice = gets.downcase.strip
+        card_name = names.detect{|n| n.downcase == choice}
+        if card_name.nil?
+          substring_matches = names.select{|n| n.downcase.include?(choice)}
+          if substring_matches.empty?
+            puts "That doesn't match any known cards...\n".colorize(:red)
+          elsif substring_matches.length > 1
+            puts "#{choice} substring is ambiguous; options are #{substring_matches}"
+          else
+            card_name = substring_matches.first
+          end
+        end
+
+        if card_name
+          blue_hand << [card_name, c.card_with_name(card_name)]
+          puts "Successfully added card; hand is " + "#{blue_hand.map(&:first)}\n".colorize(:green)
         end
       end
-
-      if card_name
-        blue_hand << [card_name, c.card_with_name(card_name)]
-        puts "Successfully added card; hand is " + "#{blue_hand.map(&:first)}\n".colorize(:green)
-      end
     end
+  end
 
-  if options[:saved_hand]
+  if options[:red_hand]
     preselected = File.open("red_hand.txt").read
     preselected.each_line do |name|
       card_name = names.detect{|n| n.downcase == name.downcase.strip}
       raise "tried to load unknown card #{name}" if card_name.nil?
-      red_hand << [card_name, c.card_with_name(card_name)] 
+      red_hand << [card_name, c.card_with_name(card_name)]
     end
   else
     while red_hand.length < 5
@@ -180,5 +192,21 @@ unless options[:random_hands]
   options[:red_hand] = red_hand
 end
 
-e = Engine.new(options)
-e.run
+puts "Should the blue player (manual input/your opponent) take the first move? Y/N"
+puts " (i.e are you playing second in the FF14 client)"
+choice = gets
+if ['Y', 'y', 'yes', 'YES'].include?(choice.strip)
+  options[:switch] = false
+else
+  options[:switch] = true
+end
+
+if options[:closed]
+  e = HintEngine.new(options)
+  e.run
+elsif options[:open]
+  e = Engine.new(options)
+  e.run
+else
+  raise "undefined operating mode"
+end
