@@ -75,7 +75,8 @@ class Board
   end
 
   # resolve captures due to the card at x,y being placed
-  def rank_captures(x, y)
+  # @arg chain if ture, this is a Combo capture and should continue to Combo
+  def rank_captures(x, y, chain = false)
     placed_card = @board[x][y]
     asc = ascension(placed_card)
     adjacencies = adjacency(x, y)
@@ -84,6 +85,7 @@ class Board
       if other_card.color != placed_card.color
         if placed_card.flips?(other_card, direction, asc, ascension(other_card))
           other_card.color = placed_card.color
+          combo_off(x, y, direction, other_card) if chain
         end
       end
     end
@@ -182,7 +184,7 @@ class Board
     end
 
     # at this point, we know that our base is card at x, y
-    rank_captures(x, y)
+    rank_captures(x, y, true)
   end
 
   def ascension(card)
